@@ -1,4 +1,4 @@
 import { createApp } from 'vue'
-import App from './App.vue'
+import SettingDialog from "./SettingDialog";
 
-createApp(App).mount('#app')
+createApp(SettingDialog).mount('#app')

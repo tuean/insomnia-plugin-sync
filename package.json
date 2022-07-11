@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build-mac": "vite build && cp -r * '/Users/tuean/Library/Application Support/Insomnia/plugins/insonmia-sync'",
     "preview": "vite preview"
   },
   "insomnia": {
@@ -13,7 +14,8 @@
   },
   "main": "dist/index.js",
   "dependencies": {
-    "vue": "^3.2.25"
+    "vue": "^3.2.25",
+    "webdav": "^4.10.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",
