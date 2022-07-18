@@ -8,6 +8,10 @@ export const set_context = ctx => {
     context = ctx
 }
 
+export const get_context = () => {
+    return context
+}
+
 export const set_webdav_url = async (url) => {
     await context.store.setItem(webdav_url, url);
 }
