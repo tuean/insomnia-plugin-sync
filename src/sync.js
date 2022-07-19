@@ -1,4 +1,6 @@
 
+const str = require('string-to-stream')
+
 export const createFolder = async (client, folder) => {
     if (await client.exists(folder) === false) {
         client.createDirectory(folder)
@@ -22,5 +24,8 @@ export const lock = async (client, wholeFilePath) => {
 }
 
 export const newFile = (client, folder, fileName, raw) => {
-
+    const writeStream = client.createWriteStream(
+        folder + '/' + fileName, {}
+    )
+    str(raw).pipe(writeStream)
 }
