@@ -1,5 +1,5 @@
 
-const str = require('string-to-stream')
+var str = require('string-to-stream')
 
 export const createFolder = async (client, folder) => {
     if (await client.exists(folder) === false) {
@@ -8,24 +8,31 @@ export const createFolder = async (client, folder) => {
 }
 
 export const checkFileExist = async (client, folder, fileName) => {
-    const items = await client.getDirectory(folder)
-    console.log("list files under" + folder)
-    if (items == null || items.length < 1) return false
-    for (let i = 0; items.length > i; i++) {
-        let filename = items[i].filename
-        if (filename === fileName) return true
-    }
-    return false
+    const wholeFilePath = folder + '/' + fileName
+    return await client.exists(wholeFilePath)
 }
 
-export const lock = async (client, wholeFilePath) => {
-    const lock = await client.lock(wholeFilePath)
-    return lock
+export const lock = async (client, folder, fileName) => {
+    const wholeFilePath = folder + '/' + fileName
+    return await client.lock(wholeFilePath)
 }
 
-export const newFile = (client, folder, fileName, raw) => {
-    const writeStream = client.createWriteStream(
-        folder + '/' + fileName, {}
-    )
-    str(raw).pipe(writeStream)
+export const unlock = async (client, folder, fileName) => {
+    const wholeFilePath = folder + '/' + fileName
+    return await client.unlock(wholeFilePath)
+}
+
+export const newFile = async (client, folder, fileName, raw) => {
+    console.log("start to create new file and file content is:")
+    const wholeFilePath = folder + '/' + fileName
+    console.log(wholeFilePath)
+    await client.putFileContents(wholeFilePath, raw)
+}
+
+export const getRemoteFile = async (client, folder, fileName) => {
+    const wholeFilePath = folder + '/' + fileName
+    const raw = await client.getFileContents(wholeFilePath, { format: "text" });
+    console.log("get remote file")
+    console.log(raw)
+    return raw
 }

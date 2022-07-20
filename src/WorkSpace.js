@@ -3,14 +3,19 @@ const webdav_user = 'insomnia-plugin-sync-webdav-user'
 const webdav_pwd = 'insomnia-plugin-sync-webdav-pwd'
 
 var context = null
+var models = null
 
-export const set_context = ctx => {
+export const set_context = (ctx, ms) => {
+    console.log(ctx, ms)
     context = ctx
+    models = ms
 }
 
 export const get_context = () => {
     return context
 }
+
+export const get_models = () => { return models }
 
 export const set_webdav_url = async (url) => {
     await context.store.setItem(webdav_url, url);

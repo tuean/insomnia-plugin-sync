@@ -12,7 +12,7 @@ module.exports.workspaceActions = [
             console.log(context)
             console.log(models)
 
-            set_context(context)
+            set_context(context, models)
             const root = document.createElement('div');
             root.id = 'insomnia-plugin-sync-setting-dialog';
             const app = createApp(SettingDialog)

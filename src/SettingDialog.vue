@@ -46,16 +46,30 @@ export default {
             username: data.user,
             password: data.token
           });
-          Sync.createFolder(client, folder)
-          const hasOldFile = Sync.checkFileExist(client, folder, fileName)
-          if (hasOldFile) {
 
-          }
+          await Sync.createFolder(client, folder)
+          const hasOldFile = await Sync.checkFileExist(client, folder, fileName)
+          console.log(fileName + " has old file", hasOldFile)
+
           const rawJsonString = await WorkSpace.get_context().data.export.insomnia({
             includePrivate: false,
             format: 'json',
-            workspace: models.workspace,
+            workspace: WorkSpace.get_models().workspace,
           });
+
+          if (!hasOldFile) {
+            console.log("No old file")
+            await Sync.newFile(client, folder, fileName, rawJsonString)
+            console.log("New file generated")
+          } else {
+            console.log("start to merge with old file")
+            const remoteRaw = await Sync.getRemoteFile(client, folder, fileName)
+            let oldJson = JSON.parse(remoteRaw)
+            console.log(oldJson)
+            let newJson = JSON.parse(rawJsonString)
+            console.log(newJson)
+          }
+
 
         }
 
