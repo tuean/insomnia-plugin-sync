@@ -1,19 +1,23 @@
-import {newFile} from "./sync";
+import * as WorkSpace from "./WorkSpace"
 
-export const merge = (oldJson, newJson) => {
-    if (oldJson === null || oldJson === undefined) return newJson;
-    if (oldJson.length === 0) return newJson;
-    let result = []
-    for (let i = 0; i < newJson.length; i++) {
-        let exist = checkExists(newJson[i]._id, result);
-        if (!exist) result.push(newJson[i]);
+export const merge = (remoteJson, localJson, sync2This) => {
+    console.log(remoteJson, localJson);
+    if (remoteJson === null || remoteJson === undefined) return localJson;
+    if (remoteJson.resources.length === 0) return localJson;
+
+    for (let i = 0; i < remoteJson.resources.length; i++) {
+        let exist = checkExists(remoteJson.resources[i]._id, localJson.resources);
+        if (!exist) localJson.resources.push(remoteJson.resources[i]);
     }
 
-    for (let i = 0; i < oldJson.length; i++) {
-        let exist = checkExists(oldJson[i]._id, result);
-        if (!exist) result.push(oldJson[i]);
+    if (sync2This) {
+        let thisParentId = WorkSpace.get_models().workspace._id
+        for (let i = 0; i < localJson.resources.length; i++) {
+            localJson.resources[i].parentId = thisParentId
+        }
     }
-    return result;
+
+    return localJson;
 }
 
 
